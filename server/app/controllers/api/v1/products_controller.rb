@@ -2,6 +2,7 @@ module Api
   module V1
     class ProductsController < ApplicationController
       before_action :set_product, except: [:index, :create]
+      before_action :set_user, only: [:create, :rent, :meet]
 
       def index
         @products = Product.where(borrower_id: nil)
@@ -14,8 +15,7 @@ module Api
       end
 
       def create
-        user = User.find_by(access_token: params[:access_token])
-        @product = user.saling_products.new(product_params)
+        @product = @user.saling_products.new(product_params)
         if @product.save
           render json: @product, status: 201
         else
@@ -24,9 +24,8 @@ module Api
       end
 
       def rent
-        user = User.find_by(access_token: params[:access_token])
-        if user.id != @product.seller_id
-          if @product.update(borrower_id: user.id)
+        if @user.id != @product.seller_id
+          if @product.update(borrower_id: @user.id)
             render json: @product, status: 200
           else
             render json: @product.errors, status: 422
@@ -35,8 +34,7 @@ module Api
       end
 
       def meet
-        user = User.find_by(access_token: params[:access_token])
-        if user.id == @product.seller_id || user.id == @product.borrower_id
+        if @user.id == @product.seller_id || @user.id == @product.borrower_id
           if @product.update(is_meet: true)
             render json: @product, status: 200
           else
@@ -46,7 +44,7 @@ module Api
       end
 
       def do_return
-        if(user.id == @product.seller_id || user.id == @product.borrower_id) && @product.is_return == false
+        if(@user.id == @product.seller_id || @user.id == @product.borrower_id) && @product.is_return == false
           if @product.update(is_return: true)
             render json: @product, status: 200
           else
@@ -71,6 +69,10 @@ module Api
 
         def set_product
           @product = Product.find(params[:id])
+        end
+
+        def set_user
+          @user = User.find_by(access_token: params[:access_token])
         end
 
     end

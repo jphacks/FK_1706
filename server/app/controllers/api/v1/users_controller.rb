@@ -49,6 +49,7 @@ module Api
         render json: @user.sold_products, status: 200
       end
 
+
       private
 
         def set_user
