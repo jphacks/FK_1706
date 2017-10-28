@@ -1,13 +1,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :set_user,
-                    only: [:show, :edit, :update, :destroy,
-                    :borrowed_products, :saling_products, :sold_products]
-                    
-      def new
-        @user = User.new
-      end
+      before_action :set_user, except: [:create]
 
       def create
         @user = User.new(user_params)
