@@ -18,6 +18,7 @@ Rails.application.routes.draw do
           get :get_borrower
           patch :rent
           patch :meet
+          patch :do_return
         end
       end
 

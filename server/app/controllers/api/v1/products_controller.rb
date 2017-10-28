@@ -1,7 +1,7 @@
 module Api
   module V1
     class ProductsController < ApplicationController
-      before_action :set_product, only: [:show, :rent, :meet, ::get_seller, :get_borrower]
+      before_action :set_product, only: [:show, :rent, :meet, :get_seller, :get_borrower]
 
       def index
         @products = Product.where(borrower_id: nil)

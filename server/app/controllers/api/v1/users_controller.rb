@@ -4,11 +4,7 @@ module Api
       before_action :set_user,
                     only: [:show, :edit, :update, :destroy,
                     :borrowed_products, :saling_products, :sold_products]
-
-      def index
-        @users = User.all
-      end
-
+                    
       def new
         @user = User.new
       end
